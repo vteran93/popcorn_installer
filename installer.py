@@ -1,4 +1,5 @@
 import os
+import stat
 import zipfile
 
 
@@ -19,7 +20,10 @@ class Installer(object):
                 zip_ref.extractall(self.PATH_TO_INSTALL)
 
             self.__create_symlink()
-            self._status.save_status(installed=True)
+
+            self._status.set_installed(True)
+            self._status.save_status()
+
         except Exception as identifier:
             self.logger.error(f"We got an exception trying to install {identifier}")
             return False
@@ -27,5 +31,7 @@ class Installer(object):
 
     def __create_symlink(self):
         origin_route = os.path.join(self.PATH_TO_INSTALL, self.BINARY)
-        destination_route = os.path.join(self.USR_BIN, self.BINARY)
-        os.symlink(origin_route, destination_route.lower())
+        destination_route = os.path.join(self.USR_BIN, self.BINARY).lower()
+        self.logger.info("Creating symlink to " + destination_route)
+        if not os.path.isfile(destination_route.lower()):
+            os.system(f"ln -s {origin_route} {destination_route}")

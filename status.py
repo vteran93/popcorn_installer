@@ -10,36 +10,41 @@ class Status(object):
     def __init__(self):
         pass
 
+    def load_status(self):
+        if os.path.isfile(self.STATUS_FILE):
+            with open(self.STATUS_FILE, 'r') as status_manager:
+                self._status = json.load(status_manager)['status']
+            status_manager.close()
+
     def get_should_install(self):
-        if os.path.isfile(self.STATUS_FILE):
-            with open(self.STATUS_FILE, 'r') as status_manager:
-                status = json.load(status_manager)['status']
-                return status['should_install']
-        return False
-
+        return self._status['should_install']
+        
     def get_should_download(self, url_path):
-        if os.path.isfile(self.STATUS_FILE):
-            with open(self.STATUS_FILE, 'r') as status_manager:
-                status = json.load(status_manager)['status']
-                return status['version'] != self.__get_version_from_path(url_path)
-        return True
-
+        return self.get_version() != self.__get_version_from_path(url_path)
+        
     def get_version(self):
-        if os.path.isfile(self.STATUS_FILE):
-            with open(self.STATUS_FILE, 'r') as status_manager:
-                status = json.load(status_manager)['status']
-                return status['version']
+        return self._status['version']
 
-    def save_status(self, download_version):
+    def set_version(self, version):
+        self._status['version'] = self.__get_version_from_path(version)
+
+    def set_should_install(self, should_install):
+        self._status['should_install'] = should_install
+    
+    def set_installed(self, installed):
+        self._status['installed'] = installed
+
+    @property
+    def is_installed(self):
+        return self._status['installed']
+
+    def save_status(self):
         with open(self.STATUS_FILE, 'w') as status_manager:
             json.dump({
-                'status': {
-                    'version':
-                    self.__get_version_from_path(download_version),
-                    'should_install': True
-                }
+                'status': self._status
             },
                 status_manager)
+            status_manager.close()
 
     def __get_version_from_path(self, path):
         url_parts = os.path.split(path)

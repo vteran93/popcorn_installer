@@ -15,7 +15,9 @@ class Downloader(object):
 
     def __init__(self, logger, status):
         self.logger = logger
-        self._status = status 
+        self._status = status
+
+        self._status.load_status()
 
     def is_downloaded(self):
         url_path = self._get_path()
@@ -23,7 +25,11 @@ class Downloader(object):
         if self._should_download(url_path):
             self.logger.info("We are going to download...")
             self._download(url_path)
-            self._status.save_status(self.__downloaded_file)
+            
+            self._status.set_version(self.__downloaded_file)
+            self._status.set_should_install(True)
+            self._status.save_status()
+
             return True
 
         if os.path.isfile(local_name):
@@ -40,12 +46,8 @@ class Downloader(object):
     def downloaded_file(self):
         return self.__downloaded_file
 
-    @property
-    def should_install(self):
-        return self._status.get_should_install()
-
     def _get_path(self):
-        self.logger.info("Getting download path...")
+        self.logger.info("Looking for Updates...")
 
         linux_downloads_res = requests.get(self.LINUX_RESOURCE)
         linux_downloads_res.raise_for_status()

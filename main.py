@@ -20,7 +20,8 @@ class Main(object):
         if self._downloader.is_downloaded():
             downloaded_file = self._downloader.downloaded_file
 
-        if self._downloader.should_install:
+        if self._downloader.should_install and\
+             not self.status.is_installed:
             self._installer.install(downloaded_file)
             self._icons.configure_icons(self.status.get_version())
 
