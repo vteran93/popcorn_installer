@@ -15,6 +15,15 @@ class Status(object):
             with open(self.STATUS_FILE, 'r') as status_manager:
                 self._status = json.load(status_manager)['status']
             status_manager.close()
+        else:
+            with open(self.STATUS_FILE, 'w') as status_manager:
+                json.dump({
+                    'status': {"version": "", "should_install": False, "installed": False}
+                },
+                status_manager)
+            status_manager.close()
+            self.load_status()
+            
 
     def get_should_install(self):
         return self._status['should_install']
