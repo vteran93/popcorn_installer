@@ -12,7 +12,7 @@ This software is not intended to stimulate piracy, it only uses python to instal
 
 ## Description
 
-A python based popcorn installer
+A python based Popcorn-Time installer
 
 To run, you will need python 3.7
 
