@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-
-from icons import Icons
-from status import Status
-from installer import Installer
-from downloader import Downloader
+from libs.icons import Icons
+from libs.status import Status
+from libs.installer import Installer
+from libs.downloader import Downloader
 
 import logging
 

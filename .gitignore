@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Ignore Project Files
+
+status.json
+.vscode/
+Popcorn-Time*
