@@ -1,5 +1,5 @@
 #! /bin/bash
-
+add-apt-repository -y ppa:deadsnakes/ppa
 apt-get update 
 apt-get install -y unzip libcanberra-gtk-module libgconf-2-4 libatomic1 python3.7-venv
 if [ ! -d "env" ]
